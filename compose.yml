@@ -8,5 +8,15 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
-    command: node server.js --host 0.0.0.0 --port 3000 --cache ./cache
+    command: npx nodemon server.js --host 0.0.0.0 --port 3000 --cache ./cache
+
+   
+
+
+
+
+
+
+
+
 

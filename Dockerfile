@@ -15,4 +15,17 @@ COPY . .
 EXPOSE 3000
 
 # Запускаємо додаток
-CMD ["node", "index.js"]
+CMD ["node", "server.js"]
+
+
+
+
+
+
+
+
+
+
+
+
+
