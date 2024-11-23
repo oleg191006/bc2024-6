@@ -1,15 +1,15 @@
 services:
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules
+  server:
+    build:
+      context: .
     environment:
-      - NODE_ENV=development
-    command: npx nodemon server.js --host 0.0.0.0 --port 3000 --cache ./cache
-
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+      - 9229:9229
+    volumes:
+      - ./:/usr/src/app
+      - ./notes:/usr/src/app/notes
    
 
 
