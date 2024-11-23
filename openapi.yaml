@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Notes API
-  description: An API for managing notes, including creating, retrieving, updating, and deleting notes.
+  description: An API for managing notes, including creating, updating, retrieving and deleting notes.
   version: 1.0.0
 servers:
   - url: http://localhost:3000
@@ -20,13 +20,13 @@ paths:
             type: string
       responses:
         "200":
-          description: Note retrieved successfully
+          description: Note retrieved
           content:
             text/plain:
               schema:
                 type: string
         "404":
-          description: Note not found
+          description: Not found
     put:
       summary: Update a  note
       parameters:
@@ -47,9 +47,9 @@ paths:
                   type: string
       responses:
         "200":
-          description: Note updated successfully
+          description: Note updated
         "404":
-          description: Note not found
+          description: Not found
         "500":
           description: Internal server error
     delete:
@@ -63,9 +63,9 @@ paths:
             type: string
       responses:
         "200":
-          description: Note deleted successfully
+          description: Note deleted
         "404":
-          description: Note not found
+          description: Not found
 
   /notes:
     get:
@@ -103,7 +103,7 @@ paths:
                   type: string
       responses:
         "201":
-          description: Note created successfully
+          description: Note created
         "400":
           description: Note already exists
         "500":
