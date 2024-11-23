@@ -10,7 +10,7 @@ servers:
 paths:
   /notes/{noteName}:
     get:
-      summary: Get a  note
+      summary: Get a note
       parameters:
         - name: noteName
           in: path
@@ -27,8 +27,9 @@ paths:
                 type: string
         "404":
           description: Not found
+
     put:
-      summary: Update a  note
+      summary: Update a note
       parameters:
         - name: noteName
           in: path
@@ -39,19 +40,21 @@ paths:
       requestBody:
         required: true
         content:
-          text/plain:
+          application/json:
             schema:
-              type: string
+              type: object
               properties:
                 note:
                   type: string
+                  description: The new content of the note
       responses:
         "200":
-          description: Note updated
+          description: Note updated successfully
         "404":
-          description: Not found
+          description: Note not found
         "500":
           description: Internal server error
+
     delete:
       summary: Delete a specific note
       parameters:
