@@ -1,9 +1,15 @@
 const { program } = require('commander');
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-
+const express = require("express");
 const app = express();
+const fs = require('fs');
+const fsSync = require('fs')
+const path = require('path');
+const http = require('http');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yaml');
+const multer = require("multer");
+
+
 
 program
     .requiredOption('-h, --host <host>', 'Адреса сервера')
@@ -13,14 +19,16 @@ program
 
 const options = program.opts();
 const cachePath = path.resolve(options.cache);
-
-
-if (!fs.existsSync(cachePath)) {
-    fs.mkdirSync(cachePath, { recursive: true });
-}
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.text());
+
+
+const file = fsSync.readFileSync('./openapi.yaml', 'utf8')
+const swaggerDocument = YAML.parse(file)
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
 
 app.get('/notes/:name', (req, res) => {
@@ -68,7 +76,9 @@ app.get('/notes', (req, res) => {
 });
 
 
-app.post('/write', (req, res) => {
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+app.post('/write', upload.none(), (req, res) => {
     const { note_name, note } = req.body;
     if (!note_name || !note) {
         return res.status(400).send('Both note name and text are required');
@@ -82,8 +92,6 @@ app.post('/write', (req, res) => {
         res.status(201).send('Note created');
     }
 });
-
-
 app.get('/UploadForm.html', (req, res) => {
     const htmlForm = `
         <form action="/write" method="post">
@@ -98,6 +106,9 @@ app.get('/UploadForm.html', (req, res) => {
 });
 
 
-app.listen(options.port, options.host, () => {
-    console.log(`Server started at http://${options.host}:${options.port}`);
+const server = http.createServer(app);
+
+server.listen(options.port, options.host, (error) => {
+    if (error) return console.log(`Error: ${error}`);
+    console.log(`Server is listening on http://${options.host}:${options.port}`);
 });
